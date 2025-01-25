@@ -17,14 +17,22 @@
     <ion-row>
       <ion-col offsetSm="2" sizeSm="8" class="ion-text-center" size="12">
         <ion-list>
-          <ion-item *ngFor="let place of loadedPlaces" [routerLink]="['/places/tabs/offers', place.id]">
-            <ion-thumbnail>
-              <ion-img [src]="place.imageUrl"></ion-img>
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{place.title}}</h2>
-            </ion-label>
-          </ion-item>
+          <ion-item-sliding *ngFor="let place of loadedPlaces" #slidingItem>
+            <ion-item [routerLink]="['/places/tabs/offers', place.id]">
+              <ion-thumbnail>
+                <ion-img [src]="place.imageUrl"></ion-img>
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{place.title}}</h2>
+              </ion-label>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option color="secondary" aria-label="Edit"
+                [routerLink]="['./edit', place.id]" (click)="slidingItem.close()">
+                <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
         </ion-list>
       </ion-col>
     </ion-row>

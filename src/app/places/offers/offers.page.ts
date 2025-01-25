@@ -20,4 +20,8 @@ export class OffersPage implements OnInit {
     this.loadedPlaces = this.placesService.places.slice(this.placesService.places.length - 1);
   }
 
+  onEdit(id: string) {
+    console.log('offer id:', id);
+  }
+
 }
