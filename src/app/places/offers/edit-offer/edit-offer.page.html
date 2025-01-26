@@ -4,8 +4,39 @@
       <ion-back-button [defaultHref]="['/places/tabs/offers/', place?.id]"></ion-back-button>
     </ion-buttons>
     <ion-title>Edit {{place?.title}}</ion-title>
+    <ion-buttons slot="primary" *ngIf="form">
+      <ion-button (click)="onUpdateOffer()" [disabled]="form.invalid">
+        <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding" *ngIf="form">
+  <form [formGroup]="form">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item>
+            <ion-input label="Title" labelPlacement="floating" type="text" autocomplete autocorrect
+              formControlName="title">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item>
+            <ion-textarea rows="3" label="Short Description" labelPlacement="floating" formControlName="description">
+            </ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="form?.get('description')?.invalid && form?.get('description')?.touched">
+        <ion-col sizeSm="6" offsetSm="3">
+          <p>Description must be between 1 and 180 characters.</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

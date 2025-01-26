@@ -10,6 +10,75 @@
 </ion-header>
 
 <ion-content class="ion-text-center ion-padding">
-  <p>{{selectedPlace?.description}}</p>
-  <ion-button color="primary" (click)="onBookPlace()">Book</ion-button>
+  <form (ngSubmit)="onBookPlace()" #f="ngForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item>
+            <ion-input type="text" ngModel name="first-name" label="First Name" labelPlacement="floating"
+              required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item>
+            <ion-input type="text" ngModel name="last-name" label="Last Name" labelPlacement="floating" required>
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item>
+            <ion-select label="Number of Guests" labelPlacement="floating" [ngModel]="'2'" name="guest-number">
+              <ion-select-option value="1">1</ion-select-option>
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item lines="none">
+            <ion-label>From</ion-label>
+            <!-- TODO: Not working properly when the form is normal (not random) -->
+            <ion-datetime-button datetime="dateFrom"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime preferWheel [showDefaultButtons]="true" presentation="date" id="dateFrom" [formatOptions]="{
+                  date: { day: '2-digit', month: 'short', year: 'numeric' },
+                }" [min]="selectedPlace?.availableFrom!.toISOString()"
+                  [max]="selectedPlace?.availableTo!.toISOString()" ngModel name="date-from" [(ngModel)]="startDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-item lines="none">
+            <ion-label>To</ion-label>
+            <ion-datetime-button datetime="date-to"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime preferWheel [showDefaultButtons]="true" presentation="date" id="date-to" [formatOptions]="{
+                  date: { day: '2-digit', month: 'short', year: 'numeric' },
+                }" [min]="startDate" [max]="selectedPlace?.availableTo?.toISOString()" [ngModel]="endDate"
+                  name="date-to">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col sizeSm="6" offsetSm="3">
+          <ion-button color="primary" type="submit" expand="block" [disabled]="f.invalid || !datesValid()">Book</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>
