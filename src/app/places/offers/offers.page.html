@@ -18,14 +18,7 @@
       <ion-col offsetSm="2" sizeSm="8" class="ion-text-center" size="12">
         <ion-list>
           <ion-item-sliding *ngFor="let place of loadedPlaces" #slidingItem>
-            <ion-item [routerLink]="['/places/tabs/offers', place.id]">
-              <ion-thumbnail>
-                <ion-img [src]="place.imageUrl"></ion-img>
-              </ion-thumbnail>
-              <ion-label>
-                <h2>{{place.title}}</h2>
-              </ion-label>
-            </ion-item>
+            <app-offer-item [offer]="place"></app-offer-item>
             <ion-item-options>
               <ion-item-option color="secondary" aria-label="Edit"
                 [routerLink]="['./edit', place.id]" (click)="slidingItem.close()">
