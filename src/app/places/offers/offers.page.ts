@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlacesService } from '../places.service';
 import { PlaceModel } from '../place.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-offers',
@@ -8,16 +9,24 @@ import { PlaceModel } from '../place.model';
   styleUrls: ['./offers.page.scss'],
   standalone: false,
 })
-export class OffersPage implements OnInit {
-  loadedPlaces: PlaceModel[] = [];
+export class OffersPage implements OnInit, OnDestroy {
+  offers: PlaceModel[] = [];
+  private placesSub?: Subscription;
 
-  constructor(private placesService: PlacesService) { }
+  constructor(
+    private placesService: PlacesService
+  ) { }
 
   ngOnInit() {
+    this.placesSub = this.placesService.places.subscribe(places => {
+      this.offers = places;
+    });
   }
 
-  ionViewWillEnter() {
-    this.loadedPlaces = this.placesService.places.slice(this.placesService.places.length - 1);
+  ngOnDestroy(): void {
+    if (this.placesSub) {
+      this.placesSub.unsubscribe();
+    }
   }
 
   onEdit(id: string) {

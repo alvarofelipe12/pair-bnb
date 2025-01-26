@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlacesService } from '../places.service';
 import { PlaceModel } from '../place.model';
 import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-discover',
@@ -9,9 +10,10 @@ import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
   styleUrls: ['./discover.page.scss'],
   standalone: false,
 })
-export class DiscoverPage implements OnInit {
+export class DiscoverPage implements OnInit, OnDestroy {
 
   loadedPlaces: PlaceModel[] = [];
+  private placesSub?: Subscription;
 
   constructor(
     private placesService: PlacesService,
@@ -19,7 +21,15 @@ export class DiscoverPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadedPlaces = this.placesService.places;
+    this.placesSub = this.placesService.places.subscribe(places => {
+      this.loadedPlaces = places;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.placesSub) {
+      this.placesSub.unsubscribe();
+    }
   }
 
   onOpenMenu() {

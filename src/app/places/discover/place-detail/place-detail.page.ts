@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, ModalController, NavController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 import { PlaceModel } from '../../place.model';
 import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-booking.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-place-detail',
@@ -11,8 +12,9 @@ import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-b
   styleUrls: ['./place-detail.page.scss'],
   standalone: false,
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
   place?: PlaceModel;
+  private placesSub?: Subscription;
 
   constructor(
     private navCtrl: NavController,
@@ -24,13 +26,21 @@ export class PlaceDetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      if (params.has('placeId')) {
-        this.place = this.placesService.getPlace(params.get('placeId')!) as PlaceModel ?? undefined;
+    this.route.paramMap.subscribe(paramMap => {
+      if (!paramMap.has('placeId')) {
+        this.navCtrl.navigateBack('/places/tabs/discover');
         return;
       }
-      this.onBookPlace();
+      this.placesSub = this.placesService.getPlace(paramMap.get('placeId')!).subscribe(place => {
+        this.place = place;
+      });
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.placesSub) {
+      this.placesSub.unsubscribe();
+    }
   }
 
   onBookPlace() {

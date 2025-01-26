@@ -17,7 +17,7 @@
     <ion-row>
       <ion-col offsetSm="2" sizeSm="8" class="ion-text-center" size="12">
         <ion-list>
-          <ion-item-sliding *ngFor="let place of loadedPlaces" #slidingItem>
+          <ion-item-sliding *ngFor="let place of offers" #slidingItem>
             <app-offer-item [offer]="place"></app-offer-item>
             <ion-item-options>
               <ion-item-option color="secondary" aria-label="Edit"
