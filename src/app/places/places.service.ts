@@ -17,7 +17,7 @@ export class PlacesService {
         189.99,
         new Date('2019-01-01'),
         new Date('2019-12-31'),
-        'abc'
+        'xyz'
       ),
       new PlaceModel(
         'p2',
