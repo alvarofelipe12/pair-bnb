@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
+import { delay, from, tap } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -18,22 +19,27 @@ export class AuthPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private loadingCtrl: LoadingController
-  ) { }
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onLogin() {
     this.isLoading = true;
     this.authService.login();
-    this.loadingCtrl.create({ keyboardClose: true, message: 'Logging in...' }).then(loadingEl => {
-      loadingEl.present();
-      setTimeout(() => {
-        this.router.navigateByUrl('/places/tabs/discover');
-        this.isLoading = false;
-        loadingEl.dismiss();
-      }, 1500);
-    });
+    from(
+      this.loadingCtrl.create({ keyboardClose: true, message: 'Logging in...' })
+    )
+      .pipe(
+        tap((loadingEl) => loadingEl.present()),
+        delay(1500)
+      )
+      .subscribe({
+        next: (loadingEl) => {
+          this.router.navigateByUrl('/places/tabs/discover');
+          this.isLoading = false;
+          loadingEl.dismiss();
+        },
+      });
   }
 
   onSubmit(form: NgForm) {
@@ -54,5 +60,4 @@ export class AuthPage implements OnInit {
   onSwitchAuthMode() {
     this.isLogin = !this.isLogin;
   }
-
 }

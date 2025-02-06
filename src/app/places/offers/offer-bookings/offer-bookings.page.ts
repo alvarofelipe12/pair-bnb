@@ -19,18 +19,20 @@ export class OfferBookingsPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private placesService: PlacesService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(param => {
+    this.route.paramMap.subscribe((param) => {
       if (param.has('placeId')) {
-        this.placesSub = this.placesService.getPlace(param.get('placeId')!).subscribe(place => {
-          this.place = place;
-          return;
-        });
+        this.placesSub = this.placesService
+          .getPlace(param.get('placeId')!)
+          .subscribe((place) => {
+            this.place = place;
+          });
+        return;
       }
       this.onBookOffer();
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -42,5 +44,4 @@ export class OfferBookingsPage implements OnInit, OnDestroy {
   onBookOffer() {
     this.navCtrl.navigateBack('/places/tabs/offers');
   }
-
 }

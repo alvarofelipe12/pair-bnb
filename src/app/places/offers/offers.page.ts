@@ -11,15 +11,21 @@ import { Subscription } from 'rxjs';
 })
 export class OffersPage implements OnInit, OnDestroy {
   offers: PlaceModel[] = [];
+  isLoading = false;
   private placesSub?: Subscription;
 
-  constructor(
-    private placesService: PlacesService
-  ) { }
+  constructor(private placesService: PlacesService) {}
 
   ngOnInit() {
-    this.placesSub = this.placesService.places.subscribe(places => {
+    this.placesSub = this.placesService.places.subscribe((places) => {
       this.offers = places;
+    });
+  }
+
+  ionViewWillEnter() {
+    this.isLoading = true;
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
     });
   }
 
@@ -32,5 +38,4 @@ export class OffersPage implements OnInit, OnDestroy {
   onEdit(id: string) {
     console.log('offer id:', id);
   }
-
 }

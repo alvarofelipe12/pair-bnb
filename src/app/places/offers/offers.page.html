@@ -5,8 +5,15 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-button slot="start" aria-label="Add" routerLink="/places/tabs/offers/new">
-        <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+      <ion-button
+        slot="start"
+        aria-label="Add"
+        routerLink="/places/tabs/offers/new"
+      >
+        <ion-icon
+          name="add-outline"
+          aria-hidden="true"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,14 +22,46 @@
 <ion-content class="ion-padding">
   <ion-grid>
     <ion-row>
-      <ion-col offsetSm="2" sizeSm="8" class="ion-text-center" size="12">
-        <ion-list>
-          <ion-item-sliding *ngFor="let place of offers" #slidingItem>
+      <ion-col
+        offsetSm="2"
+        sizeSm="8"
+        class="ion-text-center"
+        size="12"
+      >
+        <div
+          class="ion-text-center"
+          *ngIf="isLoading"
+        >
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <div
+          class="ion-text-center"
+          *ngIf="!isLoading && !offers.length"
+        >
+          <p>No offers found! Please create one</p>
+          <ion-button
+            color="primary"
+            routerLink="/places/tabs/offers/new"
+          >Offer New Place</ion-button>
+        </div>
+        <ion-list *ngIf="!isLoading && offers.length">
+          <ion-item-sliding
+            *ngFor="let place of offers"
+            #slidingItem
+          >
             <app-offer-item [offer]="place"></app-offer-item>
             <ion-item-options>
-              <ion-item-option color="secondary" aria-label="Edit"
-                [routerLink]="['./edit', place.id]" (click)="slidingItem.close()">
-                <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
+              <ion-item-option
+                color="secondary"
+                aria-label="Edit"
+                [routerLink]="['./edit', place.id]"
+                (click)="slidingItem.close()"
+              >
+                <ion-icon
+                  name="pencil-outline"
+                  slot="icon-only"
+                  aria-hidden="true"
+                ></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
